@@ -237,6 +237,8 @@ Format: Owner-Group-Others
 750 = rwxr-x---
 700 = rwx------
 
+![Uploading image.png…]()
+
 
 ---
 
