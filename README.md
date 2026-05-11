@@ -1,5 +1,4 @@
 # CPRE431 - Linux Server Security Lab
-## By: Amr El Abbasy
 ## Date: May 2026
 
 ---
@@ -47,8 +46,6 @@ Command used:
 openssl enc -aes-256-cbc -d -iter 1000 
 -in gotolink.txt -out decrypted_link.txt -k class2027
 
-> 📸 SCREENSHOT 1: Show the decryption command and output
-
 ---
 
 ### Step 2 - Download and Setup VM
@@ -56,7 +53,8 @@ openssl enc -aes-256-cbc -d -iter 1000
 - Imported into VMware Workstation
 - Booted VM to get login screen
 
-> 📸 SCREENSHOT 2: Show VMware with VM running and login screen
+>  Show VMware with VM running and login screen
+<img width="810" height="626" alt="image" src="https://github.com/user-attachments/assets/37a4ea5e-98ff-4582-9d4a-e9c88b66d444" />
 
 ---
 
@@ -67,7 +65,9 @@ Commands used in recovery mode:
 mount -o remount,rw /
 cat /etc/shadow
 
-> 📸 SCREENSHOT 3: Show /etc/shadow contents with all hashes
+>  Show /etc/shadow contents with all hashes
+<img width="857" height="532" alt="image" src="https://github.com/user-attachments/assets/72df0be7-f58c-4c9f-ac37-00ff259b2744" />
+
 
 ---
 
@@ -111,30 +111,33 @@ If match found = PASSWORD CRACKED!
 chmod +x crack.sh
 ./crack.sh
 
-> 📸 SCREENSHOT 4: Show crack.sh running and finding admin1 password
+>  Show crack.sh running and finding admin1 password
+<img width="504" height="299" alt="image" src="https://github.com/user-attachments/assets/9b953477-7afa-4b64-ba14-4c87c4fc9fcd" />
+
 
 #### Run all users crack script (inside VM):
 chmod +x crack_users.sh
 ./crack_users.sh
 
-> 📸 SCREENSHOT 5: Show crack_users.sh finding all passwords
+> Show crack_users.sh finding all passwords
+<img width="394" height="596" alt="image" src="https://github.com/user-attachments/assets/326a2b1c-ca83-4950-85a3-2d13a4af2cdb" />
+
+<img width="325" height="596" alt="WhatsApp Image 2026-05-11 at 3 06 37 AM" src="https://github.com/user-attachments/assets/2c7f6f57-2f45-4dad-a7e1-18644d5c6f01" />
 
 #### Cracked passwords results:
 
 | User | Salt | Password |
 |------|------|----------|
 | admin1 | xgLS35S6 | P@ssw0rd |
-| user1 | 2Ff.cblr | ????????? |
-| user2 | zZKc4nOX | ????????? |
-| user3 | dCPTizMy | ????????? |
-| user4 | 0Ptm7uW6 | ????????? |
-| user5 | QpU0v3n/ | ????????? |
+| user1 | 2Ff.cblr | trustnol |
+| user2 | zZKc4nOX | basketball |
+| user3 | dCPTizMy | pokeman |
+| user4 | 0Ptm7uW6 | batman |
+| user5 | QpU0v3n/ | qwerty12345 |
 
 #### Login to server as admin1:
 ssh admin1@192.168.1.26
 password: P@ssw0rd
-
-> 📸 SCREENSHOT 6: Show successful login as admin1
 
 ---
 
@@ -171,13 +174,14 @@ sudo usermod -aG allstaff,mgmt user4
 #### Automated with Ansible:
 ansible-playbook -i inventory.ini playbook.yml
 
-> 📸 SCREENSHOT 7: Show Ansible playbook running successfully
+> Show Ansible playbook running successfully
+<img width="848" height="632" alt="image" src="https://github.com/user-attachments/assets/4fc53c73-2b27-4515-84c4-4038a2c24d9a" />
+<img width="848" height="607" alt="image" src="https://github.com/user-attachments/assets/2de4a5e3-fb32-412c-800b-6da4d9929c93" />
+<img width="848" height="260" alt="image" src="https://github.com/user-attachments/assets/f6031957-f515-4e5c-b770-bf872c343f96" />
+
 
 #### Verify groups and users:
 sudo ./verify_setup.sh
-
-> 📸 SCREENSHOT 8: Show groups created (allstaff, prog, mgmt)
-> 📸 SCREENSHOT 9: Show user memberships (id user1 to id user5)
 
 ---
 
@@ -233,10 +237,6 @@ Format: Owner-Group-Others
 750 = rwxr-x---
 700 = rwx------
 
-> 📸 SCREENSHOT 10: Show ls -l /home/user1/ permissions
-> 📸 SCREENSHOT 11: Show ls -l /home/user1/code/ permissions
-> 📸 SCREENSHOT 12: Show ls -l /home/user1/documentation/ permissions
-> 📸 SCREENSHOT 13: Show ls -l /home/user4/finance/ permissions
 
 ---
 
@@ -257,11 +257,13 @@ sudo -u user4 cat /home/user3/finance/business.txt     (not owner)
 #### Run all tests:
 sudo ./test_access.sh
 
-> 📸 SCREENSHOT 14: Show test_access.sh with all 8 tests PASSED
+> Show test_access.sh with all 8 tests PASSED
+<img width="462" height="645" alt="image" src="https://github.com/user-attachments/assets/4e23c3ff-d023-4ba5-b13e-4248db3809df" />
+
 
 ---
 
-## DevOps Tools Used (Bonus)
+## DevOps Tools Used
 
 ### 1. Ansible
 Used to automate all of Part 2 setup automatically.
@@ -279,8 +281,6 @@ Why Ansible:
 Run the playbook:
 ansible-playbook -i inventory.ini playbook.yml
 
-> 📸 SCREENSHOT 15: Show Ansible playbook output
-
 ### 2. Git
 Used for version control to track all project scripts.
 
@@ -289,17 +289,6 @@ git init
 git add .
 git commit -m "CPRE431 Final Project - Complete"
 git push -u origin master
-
-> 📸 SCREENSHOT 16: Show git log --oneline output
-
-### 3. Lynis (Security Audit)
-Used to audit the server security after setup.
-
-Commands:
-sudo apt install lynis -y
-sudo lynis audit system
-
-> 📸 SCREENSHOT 17: Show Lynis security score
 
 ---
 
@@ -323,7 +312,6 @@ sudo lynis audit system
 | 14 | test_access.sh all 8 tests passed |
 | 15 | Ansible playbook output |
 | 16 | git log output |
-| 17 | Lynis security score |
 
 ---
 
@@ -345,7 +333,3 @@ Step 5 - Verify setup
 sudo ./verify_setup.sh
 Step 6 - Test access control
 sudo ./test_access.sh
-
-Save: Ctrl+O → Enter → Ctrl+X
-
-Now push everything to GitH
