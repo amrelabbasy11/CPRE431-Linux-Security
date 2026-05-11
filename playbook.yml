@@ -1,0 +1,171 @@
+---
+- name: CPRE431
+  hosts: server
+  become: yes
+
+  tasks:
+
+    # ========== PART 2A - GROUPS ==========
+    - name: Create allstaff group
+      group:
+        name: allstaff
+        state: present
+
+    - name: Create prog group
+      group:
+        name: prog
+        state: present
+
+    - name: Create mgmt group
+      group:
+        name: mgmt
+        state: present
+
+    # ========== PART 2A - ASSIGN USERS ==========
+    - name: Add user1 to groups (programmer)
+      user:
+        name: user1
+        groups: allstaff,prog
+        append: yes
+
+    - name: Add user2 to groups (programmer)
+      user:
+        name: user2
+        groups: allstaff,prog
+        append: yes
+
+    - name: Add user3 to groups (programmer+manager)
+      user:
+        name: user3
+        groups: allstaff,prog,mgmt
+        append: yes
+
+    - name: Add user4 to groups (manager)
+      user:
+        name: user4
+        groups: allstaff,mgmt
+        append: yes
+
+    # user5 gets NO groups (external consultant)
+
+    # ========== PART 2B - CREATE DIRECTORIES ==========
+    - name: Create code directories for programmers
+      file:
+        path: "/home/{{ item }}/code"
+        state: directory
+        owner: "{{ item }}"
+        group: prog
+        mode: '0770'
+      loop:
+        - user1
+        - user2
+        - user3
+
+    - name: Create documentation directories for programmers
+      file:
+        path: "/home/{{ item }}/documentation"
+        state: directory
+        owner: "{{ item }}"
+        group: allstaff
+        mode: '0750'
+      loop:
+        - user1
+        - user2
+        - user3
+
+    - name: Create finance directories for managers
+      file:
+        path: "/home/{{ item }}/finance"
+        state: directory
+        owner: "{{ item }}"
+        group: "{{ item }}"
+        mode: '0700'
+      loop:
+        - user3
+        - user4
+
+    # ========== PART 2B - CREATE FILES ==========
+    - name: Create source_code.txt for programmers
+      file:
+        path: "/home/{{ item }}/code/source_code.txt"
+        state: touch
+        owner: "{{ item }}"
+        group: prog
+        mode: '0660'
+      loop:
+        - user1
+        - user2
+        - user3
+
+    - name: Create myapp.exe for programmers
+      file:
+        path: "/home/{{ item }}/code/myapp.exe"
+        state: touch
+        owner: "{{ item }}"
+        group: prog
+        mode: '0750'
+      loop:
+        - user1
+        - user2
+        - user3
+
+    - name: Create notes.txt for programmers
+      file:
+        path: "/home/{{ item }}/documentation/notes.txt"
+        state: touch
+        owner: "{{ item }}"
+        group: allstaff
+        mode: '0640'
+      loop:
+        - user1
+        - user2
+        - user3
+
+    - name: Create business.txt for managers
+      file:
+        path: "/home/{{ item }}/finance/business.txt"
+        state: touch
+        owner: "{{ item }}"
+        group: "{{ item }}"
+        mode: '0600'
+      loop:
+        - user3
+        - user4
+
+    - name: Create schedule.txt for all users
+      file:
+        path: "/home/{{ item }}/schedule.txt"
+        state: touch
+        owner: "{{ item }}"
+        group: "{{ item }}"
+        mode: '0644'
+      loop:
+        - user1
+        - user2
+        - user3
+        - user4
+        - user5
+
+    # ========== PART 2B - HOME DIRECTORY PERMISSIONS ==========
+    - name: Set home directory permissions
+      file:
+        path: "/home/{{ item }}"
+        state: directory
+        owner: "{{ item }}"
+        group: "{{ item }}"
+        mode: '0711'
+      loop:
+        - user1
+        - user2
+        - user3
+        - user4
+        - user5
+
+    # ========== VERIFY ==========
+    - name: Show groups
+      command: cat /etc/group
+      register: group_output
+
+    - name: Print group info
+      debug:
+        msg: "{{ group_output.stdout_lines | select('match', '(allstaff|prog|mgmt).*') | list }}"
