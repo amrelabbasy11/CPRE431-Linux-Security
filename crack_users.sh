@@ -4,7 +4,7 @@
 # CRACK ALL USERS - Run inside VM as admin1
 # =============================================
 
-WORDLIST="/home/admin1/100k-most-used-passwords-NIST.txt"
+WORDLIST="100k-most-used-passwords-NIST.txt"
 
 # Fix Windows line endings
 sed -i 's/\r//' "$WORDLIST"
